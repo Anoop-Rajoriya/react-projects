@@ -1,0 +1,37 @@
+[
+  {
+    "id": 1,
+    "name": "Sophia Carter",
+    "email": "sophia.carter@example.com",
+    "image": "https://i.pravatar.cc/200?img=1",
+    "feedback": "This product exceeded my expectations! The attention to detail and ease of use make it a game-changer for my workflow."
+  },
+  {
+    "id": 2,
+    "name": "James Anderson",
+    "email": "james.anderson@example.com",
+    "image": "https://i.pravatar.cc/200?img=2",
+    "feedback": "Absolutely fantastic! The support team is incredibly responsive, and the platform is super intuitive. Highly recommended."
+  },
+  {
+    "id": 3,
+    "name": "Emily Johnson",
+    "email": "emily.johnson@example.com",
+    "image": "https://i.pravatar.cc/200?img=3",
+    "feedback": "I love how seamless the experience is. The design is sleek, and everything works flawlessly. It’s exactly what I was looking for!"
+  },
+  {
+    "id": 4,
+    "name": "Daniel Martinez",
+    "email": "daniel.martinez@example.com",
+    "image": "https://i.pravatar.cc/200?img=4",
+    "feedback": "This tool saved me so much time! I appreciate the thoughtful features and the overall performance. It’s worth every penny."
+  },
+  {
+    "id": 5,
+    "name": "Olivia Brown",
+    "email": "olivia.brown@example.com",
+    "image": "https://i.pravatar.cc/200?img=5",
+    "feedback": "A must-have for anyone serious about productivity. The interface is clean, and the functionality is top-notch. I’m beyond impressed!"
+  }
+]

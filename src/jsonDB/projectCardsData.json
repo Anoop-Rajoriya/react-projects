@@ -1,0 +1,38 @@
+[
+    {
+      "id": 1,
+      "title": "Todo App",
+      "description": "A simple app to add, edit, and delete tasks. Helps users stay organized with task lists and deadlines."
+    },
+    {
+      "id": 2,
+      "title": "Testimonials",
+      "description": "A section to showcase user feedback and reviews with a carousel or card layout for better presentation."
+    },
+    {
+      "id": 3,
+      "title": "Accordions",
+      "description": "Interactive collapsible sections to organize content. Useful for FAQs or multi-step instructions."
+    },
+    {
+      "id": 4,
+      "title": "Form Validation",
+      "description": "Validates user inputs in real-time, checking for errors like empty fields, invalid emails, or password strength."
+    },
+    {
+      "id": 5,
+      "title": "Calculator",
+      "description": "A web-based calculator that performs basic arithmetic operations with a responsive UI."
+    },
+    {
+      "id": 6,
+      "title": "Meal API",
+      "description": "Fetches meal recipes from an API and displays ingredients, instructions, and images of dishes."
+    },
+    {
+      "id": 7,
+      "title": "Product Filtering",
+      "description": "Filters products based on categories, prices, or ratings, enhancing the shopping experience."
+    }
+  ]
+  

@@ -1,0 +1,72 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --primary-bg: #fdfdfd; /* Soft white */
+  --complimentary-bg: #f1f3f5; /* Gentle gray */
+  --primary-text: #374151; /* Comfortable dark gray */
+  --secondary-text: #6b7280; /* Softer gray */
+  --hover-bg: #e5e7eb; /* Light hover */
+  --error-text: #e53e3e; /* Softer red */
+  --success-text: #2f855a; /* Balanced green */
+  --error-bg: rgba(229, 62, 62, 0.1);
+  --success-bg: rgba(47, 133, 90, 0.1);
+
+  /* User-selectable accent colors */
+  --accent: #0a66c2; /* Softer blue */
+}
+
+.accent2 {
+  --accent: #7c3aed; /* Vibrant purple */
+}
+.accent3 {
+  --accent: #d97706; /* Warm gold */
+}
+.accent4 {
+  --accent: #16a34a; /* Fresh green */
+}
+
+.dark {
+  --primary-bg: #0d1117; /* GitHub dark */
+  --complimentary-bg: #161b22; /* Slightly lighter dark */
+  --primary-text: #e6edf3; /* Light text */
+  --secondary-text: #8b949e; /* Grayish text */
+  --hover-bg: #30363d; /* Dark hover */
+  --error-text: #f85149; /* Brighter red */
+  --success-text: #3fb950; /* Bright green */
+  --error-bg: rgba(248, 81, 73, 0.15);
+  --success-bg: rgba(63, 185, 80, 0.15);
+
+  /* Same accent colors, adjusted for dark mode */
+  --accent: #58a6ff; /* Light blue */
+}
+
+.dark.accent2 {
+  --accent: #bc8cff; /* Purple */
+}
+.dark.accent3 {
+  --accent: #e3b341; /* Gold */
+}
+.dark.accent4 {
+  --accent: #56d364; /* Green */
+}
+
+.shimmer-effect {
+  @apply bg-complimentaryBackground border-2 border-primaryBackground relative overflow-hidden;
+}
+
+.shimmer-effect::before {
+  content: "";
+  @apply absolute top-0 left-0 h-full w-full bg-gradient-to-r from-transparent via-primaryBackground to-transparent;
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
