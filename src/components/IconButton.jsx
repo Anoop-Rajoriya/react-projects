@@ -4,7 +4,7 @@ const IconButton = ({ children, type, className, handler, id }) => {
   return (
     <button
       id={id}
-      onClick={handler}
+      onClick={handler && handler}
       type={type && type}
       className={`rounded-lg ${className}`}
     >

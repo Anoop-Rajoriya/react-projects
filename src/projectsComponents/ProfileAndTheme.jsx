@@ -18,7 +18,7 @@ const ProfileAndTheme = () => {
     <>
       <Profile />
       <Theme />
-      <section className="py-4 grid md:grid-cols-2 gap-4">
+      <section className="py-4 grid md:grid-cols-2 gap-4 justify-center">
         {data.map(({ title, description, id }) => (
           <TextCard
             handler={handleTextCardClick}

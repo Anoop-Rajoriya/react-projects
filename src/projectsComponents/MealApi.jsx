@@ -1,165 +1,129 @@
 import React, { useEffect, useState } from "react";
-import { FaSearch } from "react-icons/fa";
 import Heading from "../components/Heading";
+import Input from "../components/Input";
+import Loader from "../components/Loader";
 
 const MealApiProject = () => {
-  const [mealCardInfo, setMealCardInfo] = useState(null);
-  const [mealIngrediants, setMealIngrediants] = useState(null);
-  const [mealInstructions, setMealInstructions] = useState(null);
-  const [error, setError] = useState("");
-  const [userInput, setUserInput] = useState("a");
+  const [searchQuery, setSearchQuery] = useState("milk");
+  const [meal, setMeal] = useState(null);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
 
+  // handle searing
+  const handleSearch = (e) => {
+    const query = e.target.value.trim();
+    setSearchQuery(query);
+  };
+
+  // handle data fetching
   useEffect(() => {
-    function dataOrganizer(data) {
-      const obj = data[Math.floor(Math.random() * data.length)];
-
-      setMealCardInfo({
-        title: obj.strMeal,
-        url: obj.strMealThumb,
-        category: obj.strCategory,
-        area: obj.strArea,
-      });
-
-      // extracting all ingrediants key values
-      const ing = Object.keys(obj)
-        .filter((key) => key.includes("strIngredient") && obj[key]?.trim())
-        .map((key) => obj[key]);
-      setMealIngrediants([...ing]);
-
-      const ins = obj.strInstructions
-        .replace(/\s{2,}/g, " ") // Remove extra spaces
-        .replace(/^\.\s*/, "") // Remove leading dots
-        .replace(/\d+\.\s*/g, "") // Remove numbered steps (e.g., 2. or 3.)
-        .replace(/\r\n|\n|\r/g, " ") // Replace line breaks with spaces
-        .split(/(?<=[.?!])\s+/) // Split into sentences by punctuation
-        .filter((sentence) => sentence.trim().length > 0); // Remove empty sentences
-      setMealInstructions(ins);
-      console.log(obj.strInstructions);
-    }
-    // handling data fetching from api point
-    async function fetchData(url) {
-      setError("");
+    (async () => {
+      setError(null);
+      setLoading(true);
+      setMeal(null);
       try {
-        const response = await fetch(url);
-
+        const response = await fetch(
+          `https://www.themealdb.com/api/json/v1/1/search.php?s=${searchQuery}`
+        );
         if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
+          throw new Error(`HTTP Error! Status: ${response.status}`);
         }
-
-        const data = await response.json(); // parsing json response
-        dataOrganizer(data.meals);
+        const res = await response.json();
+        setMeal(res?.meals[0]);
       } catch (error) {
-        console.error("Fetch error:", error.message);
+        console.log(error);
         setError(error.message);
+        setMeal(null);
+      } finally {
+        setLoading(false);
       }
-    }
+    })();
+  }, [searchQuery]);
 
-    fetchData(
-      `https://www.themealdb.com/api/json/v1/1/search.php?s=${userInput}`
-    );
-  }, [userInput]);
+  const getIngrediants = () => {
+    if (meal && Object.keys(meal).length < 0) return [];
+    return Object.keys(meal)
+      .filter((key) => key.includes("strIngredient") && meal[key].length)
+      .map((key) => meal[key]);
+  };
 
-  const userInputHandler = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.target);
-    const query = data.get("userQuery");
-    setUserInput(query.length ? query : "a");
+  const getInstruction = () => {
+    if (meal && Object.keys(meal).length < 0) return [];
+    return meal.strInstructions
+      .replace(/\s{2,}/g, " ") // Remove extra spaces
+      .replace(/^\.\s*/, "") // Remove leading dots
+      .replace(/\d+\.\s*/g, "") // Remove numbered steps (e.g., 2. or 3.)
+      .replace(/\r\n|\n|\r/g, " ") // Replace line breaks with spaces
+      .split(/(?<=[.?!])\s+/) // Split into sentences by punctuation
+      .filter((sentence) => sentence.trim().length > 0); // Remove empty sentences
   };
 
   return (
     <section>
       <Heading>Meal Menu (Meal Api)</Heading>
-      <div className="w-full grid gap-2 md:grid-cols-2 mt-4">
-        {/* handling user inputs  */}
-        <form
-          onSubmit={userInputHandler}
-          action=""
-          className=" bg-complimentaryBackground rounded-lg flex items-center text-secondaryText font-bold md:col-span-2"
-        >
-          <input
-            name="userQuery"
-            type="search"
-            placeholder="search meal"
-            className="bg-transparent p-2 md:p-3 pl-3 md:pl-6 text-lg outline-none flex-1 placeholder:capitalize"
-          />
-          <button className="p-2 md:p-3 pr-3 md:pr-6 self-stretch rounded-lg">
-            <FaSearch className="size-5" />
-          </button>
-        </form>
-
-        {/* handling errors  */}
-        {error && (
-          <p className="p-2 rounded-lg bg-errorTransparent text-error border-2 border-error md:col-span-2 text-center font-semibold">
-            {error}
+      <div className="w-full mt-4">
+        <Input
+          handler={handleSearch}
+          value={searchQuery}
+          label={"search here"}
+          placeholder="search here"
+          type="search"
+          required={true}
+          errorLabel={error}
+        />
+        {/* handleing no data found  */}
+        {loading == false && !meal && (
+          <p className="text-secondaryText capitalize text-center p-2 py-5">
+            no data found
           </p>
         )}
+        {/* handle loading  */}
+        {error == null && loading && <Loader />}
+        {/* main ui */}
 
-        {/* meal card component */}
-        <section
-          id="Meal-card"
-          className={`${
-            mealCardInfo ? "" : "shimmer-effect"
-          } flex items-center justify-center bg-complimentaryBackground w-full min-h-36 p-2 rounded-lg md:col-span-1`}
-        >
-          {mealCardInfo && (
-            <>
-              <img
-                className=" w-1/2 rounded-lg"
-                src={mealCardInfo.url}
-                alt=""
-              />
-              <section className=" flex-1 p-2 pl-6">
-                <h1 className="capitalize text-primaryText text-lg md:text-xl font-bold mb-2 ">
-                  {mealCardInfo.title}
-                </h1>
-                <h2 className="text-base md:text-lg capitalize py-1 text-secondaryText font-semibold ">
-                  <span>category: </span> {mealCardInfo.category}
+        {meal && (
+          <section className="pt-6 space-y-4">
+            <section className="flex flex-col md:flex-row items-center justify-center gap-6 bg-complimentaryBackground rounded-lg p-2">
+              <div className="size-40 md:size-60 rounded-full border-accent border-4 overflow-hidden">
+                <img
+                  className="w-full h-full object-cover object-center aspect-square"
+                  src={meal.strMealThumb}
+                  alt=""
+                />
+              </div>
+              <div className="flex flex-col items-center md:items-start justify-center">
+                <h2 className="text-primaryText font-bold text-xl md:text-2xl capitalize pb-2">
+                  {meal.strMeal}
                 </h2>
-                <h3 className="text-base md:text-lg capitalize py-1 text-secondaryText font-semibold ">
-                  <span>area: </span>
-                  {mealCardInfo.area}
-                </h3>
-              </section>
-            </>
-          )}
-        </section>
-
-        {/* meal ingrediants component  */}
-        <section
-          id="ingredients"
-          className={`${
-            !mealIngrediants ? "shimmer-effect" : ""
-          } bg-complimentaryBackground p-2 rounded-lg min-h-40 md:col-span-1`}
-        >
-          <h2 className="text-lg md:text-xl font-bold capitalize mb-2 text-primaryText">
-            Meal ingrediants
-          </h2>
-          <ul className=" w-full grid grid-cols-2 items-start justify-between gap-2 text-secondaryText font-semibold">
-            {mealIngrediants?.map((ingredients, index) => (
-              <li key={index} className="text-base md:text-lg">
-                {index + 1}. {ingredients}
-              </li>
-            ))}
-          </ul>
-        </section>
-        {/* meal instruction component  */}
-        <section
-          className={`${
-            !mealInstructions ? "shimmer-effect" : ""
-          } bg-complimentaryBackground p-2 md:p-3 rounded-lg md:col-span-2`}
-        >
-          <h2 className="text-primaryText capitalize font-bold text-lg md:text-xl mb-3">
-            meal instructions
-          </h2>
-
-          <ul className="text-secondaryText space-y-2 text-base md:text-lg font-semibold">
-            {mealInstructions?.map((instruction, index) => (
-              <li key={index}>
-                {index + 1}. {instruction}.
-              </li>
-            ))}
-          </ul>
-        </section>
+                <p className="text-secondaryText capitalize font-semibold">
+                  {meal.strCategory} meal , from {meal.strArea}
+                </p>
+              </div>
+            </section>
+            <h2 className="capitalize font-bold md:text-2xl text-xl">
+              meal ingrediants:
+            </h2>
+            <ul className="flex items-start justify-center p-2 bg-complimentaryBackground rounded-lg gap-2 flex-wrap">
+              {getIngrediants().length &&
+                getIngrediants().map((ins, index) => (
+                  <li key={index}>
+                    {index + 1}. {ins}
+                  </li>
+                ))}
+            </ul>
+            <h2 className="capitalize font-bold md:text-2xl text-xl">
+              meal instructions:
+            </h2>
+            <ul className="flex flex-col p-2 py-4  bg-complimentaryBackground rounded-lg gap-2 flex-wrap">
+              {getInstruction().length &&
+                getInstruction().map((ins, index) => (
+                  <li key={index}>
+                    {index + 1}. {ins}
+                  </li>
+                ))}
+            </ul>
+          </section>
+        )}
       </div>
     </section>
   );
