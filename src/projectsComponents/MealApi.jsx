@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Heading from "../components/Heading";
 import Input from "../components/Input";
 import Loader from "../components/Loader";
+import UseFetch from "../UseFetch";
 
 const MealApiProject = () => {
   const [searchQuery, setSearchQuery] = useState("milk");
@@ -9,36 +10,21 @@ const MealApiProject = () => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  const setResult = (res) => {
+    setMeal(res?.meals[0]);
+  };
+
+  UseFetch(
+    `https://www.themealdb.com/api/json/v1/1/search.php?s=${searchQuery}`,
+    [searchQuery],
+    [setResult, setError, setLoading]
+  );
+
   // handle searing
   const handleSearch = (e) => {
     const query = e.target.value.trim();
     setSearchQuery(query);
   };
-
-  // handle data fetching
-  useEffect(() => {
-    (async () => {
-      setError(null);
-      setLoading(true);
-      setMeal(null);
-      try {
-        const response = await fetch(
-          `https://www.themealdb.com/api/json/v1/1/search.php?s=${searchQuery}`
-        );
-        if (!response.ok) {
-          throw new Error(`HTTP Error! Status: ${response.status}`);
-        }
-        const res = await response.json();
-        setMeal(res?.meals[0]);
-      } catch (error) {
-        console.log(error);
-        setError(error.message);
-        setMeal(null);
-      } finally {
-        setLoading(false);
-      }
-    })();
-  }, [searchQuery]);
 
   const getIngrediants = () => {
     if (meal && Object.keys(meal).length < 0) return [];

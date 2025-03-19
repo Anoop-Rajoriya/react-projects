@@ -74,7 +74,7 @@ const App = () => {
           )}
         </header>
         <main
-          className={`text-base md:text-lg text-primaryText p-2 px-3 md:px-4 w-full max-w-3xl mx-auto`}
+          className={`text-base md:text-lg text-primaryText p-2 px-3 md:px-4 w-full max-w-4xl mx-auto`}
         >
           {randerProject()}
         </main>
