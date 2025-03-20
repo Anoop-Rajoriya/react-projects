@@ -18,6 +18,8 @@ This repository showcases a collection of React-based projects, each accessible 
 
 The main application presents a series of cards, each representing a subproject. Users can click on a card to navigate to the respective subproject.
 
+![Landing-Page Screenshot](./projectScreens/landingPage.png)
+
 ## Subprojects
 
 ### 1. To-Do App
